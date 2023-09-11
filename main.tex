@@ -19,7 +19,7 @@
 \maketitle
 
 \section{Introduction}
-The manipulation of matrices is key to progressing quantum algorithms, specifically in crafting matrix functions. Fluidly performing various operations efficiently is essential to creating a true quantum advantage in the algorithm space. At the heart of matrix functions and arguably underpinning the idea of quantum computation \cite{Feynman82} is the concept of Hamiltonian simulation. Physics 101 teaches the famous Schrödinger equation --- the basis for Hamiltonian simulation,
+Matrix manipulation is a core element of quantum algorithms, specifically matrix functions. Performing various operations efficiently is essential to creating a true quantum advantage in the algorithm space. At the heart of matrix functions and arguably underpinning the idea of quantum computation \cite{Feynman82} is the concept of Hamiltonian simulation. Physics 101 teaches the famous Schrödinger equation --- the basis for Hamiltonian simulation,
 \begin{equation}\label{eq:shcrodinger_eq}
     H\ket{\psi(t)} = -i\pdv{t}\ket{\psi(t)}
 \end{equation}
@@ -27,17 +27,19 @@ The idea in quantum computation is to simulate the evolution of this system by i
 \begin{equation}\label{eq:exp_H}
     \ce^{\ci Ht}
 \end{equation}
-Such a simple expression has produced a vast array of research and techniques aimed at giving efficient simulation. It was proven by Lloyd \cite{Lloyd1996} that indeed, quantum computers can be used to simulate the dynamics of local Hamiltonians. The justification for considering local Hamiltonians was due to the fact systems in nature exhibit such properties \cite{Ambainis14QMA,CN14}. The primitive method employed by Lloyd was related to the Trotter--Suzuki--Lie method, which decomposes the matrix exponential into smaller steps,
+Such a simple expression has produced a vast array of research and techniques aimed at giving efficient simulation. It was proven by Lloyd \cite{Lloyd1996} that quantum computers can be used to simulate the dynamics of local Hamiltonians. Locality is already an inherit property of systems in nature \cite{Ambainis14QMA,CN14}, hence the consideration of local Hamiltonians is justified and important. The primitive method employed by Lloyd related to the Trotter--Suzuki--Lie method. This decomposes the matrix exponential into smaller steps,
 \begin{equation}
     \ce^{\ci Ht} = \big(\ce^{\ci H_1 \frac{t}{n} + \ldots + \ci H_m \frac{t}{n}} \big)^n = \big(\ce^{\ci H_1 \frac{t}{n}}\ldots \ce^{\ci H_m \frac{t}{n}} + \mathcal{E} \big)^n
 \end{equation}
-where $\norm{\mathcal{E}} = O(m^2t^2/n^2)$. By choosing a sufficient value for $n$, it can be shown that $U = \big(\ce^{\ci H_1 \frac{t}{n}}\ldots \ce^{\ci H_m \frac{t}{n}}\big)^n$ approximates eq. (\ref{eq:exp_H}) within some error $\varepsilon$. Notice with this method that the number of gates needed scales quadratically with time, while efficient from a theoretical computer science perspective, is not realistically ideal for long time intervals!
+where $\norm{\mathcal{E}} = O(m^2t^2/n^2)$. By choosing a sufficient value for $n$, it can be shown that $U = \big(\ce^{\ci H_1 \frac{t}{n}}\ldots \ce^{\ci H_m \frac{t}{n}}\big)^n$ approximates eq. (\ref{eq:exp_H}) within some error $\varepsilon$. The gate complexity scales quadratically with time, while efficient from a theoretical computer science perspective, is not realistically ideal for long time intervals!
 
-The goal of Hamiltonian simulation is to produce an efficient simulation of the matrix exponential of some Hamiltonian up to a defined error, specifically, construct some $U$ such that,
+The goal of Hamiltonian simulation is to produce a cost efficient simulation of the matrix exponential of some Hamiltonian up to a defined error, specifically, construct some $U$ such that,
 \begin{equation}\label{eq:expH_norm}
     \norm{U - \ce^{\ci Ht}} \leq \varepsilon
 \end{equation}
-In this essay, we analyse pieces of a new approach for Hamiltonian simulation --- \emph{quantum signal processing} (\textsc{qsp}) \cite{LC17}; specifically the single ancilla variant. Before delving into this idea, however, we must fulfil some prerequisites. Below, fig. \ref{fig:pipeline}, shows a workflow of concepts that lead ultimately to another technique, the quantum singular value transformation \cite{GSLW19}. We do not cover that here; however, we do note that this technique is a further generalisation of \textsc{qsp} (and other ideas); it is a powerful concept that has arguably led to the idea of a `grand unification' of quantum algorithms \cite{MRTC21}.
+In this essay, we briefly analyse elements of a new approach for Hamiltonian simulation --- \emph{quantum signal processing} (\textsc{qsp}) \cite{LC17}; specifically the single ancilla variant. \textsc{qsp} offers an optimal algorithm based on sequential applications of single qubit rotation gates; this systematic method block encodes a desired polynomial function on the eigenvalues.
+
+There are some important prerequisites to this idea. Below, fig. \ref{fig:pipeline}, shows a workflow of concepts that lead ultimately to another technique, the quantum singular value transformation \cite{GSLW19}. We do not cover that here; however, we do note that this technique is a further generalisation of \textsc{qsp} (and other ideas). It is a powerful concept that has arguably led to the idea of a `grand unification' of quantum algorithms \cite{MRTC21}.
 
 \begin{figure}[h!]
     \centering
@@ -78,9 +80,9 @@ In this essay, we analyse pieces of a new approach for Hamiltonian simulation --
 
 \clearpage
 \section{Block Encoding}
-The idea of block encoding can be described succinctly as a technique that allows for the application of some general matrix $A\in\mathbb{C}^{2^n\times 2^n}$, where $A$ is not necessarily unitary, on a quantum state. A requirement for quantum gates implemented on a quantum circuit is unitarity; however, one may be interested in the dynamics of a state under the influence of a non--unitary matrix. Block encoding, therefore, answers the question: \emph{how could we implement $A$ on a quantum computer}?
+Succinctly described, block encoding is a technique that permits the application of some general matrix $A\in\mathbb{C}^{2^n\times 2^n}$, where $A$ is not necessarily unitary, on a quantum state. Implementation of a gate on quantum hardware requires said gate to be unitary; yet, one may be interested in the dynamics of a state under the influence of a non--unitary matrix. Block encoding, therefore, answers the question: \emph{how could we implement $A$ on a quantum computer}?
 
-At a basic level, the technique embeds $A$ within some larger but unitary matrix to allow for its implementation on a quantum computer. A trivial example: the \textsc{cnot} gate, which encodes the action of the Pauli--$X$ gate on some target qubit(s), dictated by the state of the control qubit(s). Block encoding is slightly more general than this; however, the intuition is analogous, cf. Fig. \ref{fig:BE_diagram}.
+At a basic level, this technique embeds $A$ within some larger but unitary matrix, to allow for its implementation on a quantum computer. A trivial example: the \textsc{cnot} gate, which encodes the action of the Pauli--$X$ gate on some target qubit(s), dictated by the state of the control qubit(s). Block encoding is slightly more general than this but the intuition is analogous, cf. Fig. \ref{fig:BE_diagram}.
 
 \begin{figure}[h!]
     \centering
@@ -112,7 +114,7 @@ Additionally, the state $\ket{\perp}$ remains unspecified but is orthogonal with
 \begin{equation}
     \mathcal{P}(\ket{0^m}) = \frac{\norm{A\ket{\psi}}^2}{\alpha^2}
 \end{equation}
-With $O\big(1/\sqrt{\mathcal{P}(\ket{0^m})}\big)$ round of amplitude amplification, we can boost the probability of success. A very general definition can be given for the block encoding of a matrix. Note that the explicit form of a block encoding need not take the exact form shown in eq. (\ref{eq:BE}) and in fact the action of $A$ can be extracted from the encoding $U_A$ via some \emph{signal state} $\ket{G}$. Moreover,
+With $O\big(1/\sqrt{\mathcal{P}(\ket{0^m})}\big)$ round of amplitude amplification, we can boost the probability of success. Note, the explicit form of a block encoding need not take the exact form shown in eq. (\ref{eq:BE}) and in fact the action of $A$ can be extracted from the encoding $U_A$ via some \emph{signal state} $\ket{G}$. Moreover,
 \begin{defn}{\textnormal{\cite{LinLin22,LC19}}}
 
     \noindent Given an $n$-qubit matrix $A$, if we can find parameters, $\alpha, \epsilon \in \mathbb{R}^+$ and an $(m+n)$-qubit unitary, $U_A$, and a signal state $\ket{G}\in\mathbb{C}^{2^m}$, such that, 
@@ -122,7 +124,7 @@ With $O\big(1/\sqrt{\mathcal{P}(\ket{0^m})}\big)$ round of amplitude amplificati
     Then $U_A$ is the $(\alpha, m, \epsilon)$--\textsc{be} of $A$.
 \end{defn}
 
-Notice that the circuit shown in fig. \ref{fig:BE_A} can be repeated several times to generate powers of $A$. This probes the idea of block encoding functions of matrices, i.e. $f(A)$. This is the basis for \emph{qubitisation} \cite{LC19}; qubitisation uses a block encoded iterate in the eigenbasis of a Hamiltonian to craft Chebyshev polynomials on said Hamiltonian. The term qubitisation refers to the 2D space spanned by the states, reminiscent of eq. (\ref{eq:BE_states}).
+Notice that the circuit of fig. \ref{fig:BE_A} can be repeated several times to generate powers of $A$. This probes the idea of block encoding functions of matrices, i.e. $f(A)$. This is the basis for \emph{qubitisation} \cite{LC19}; qubitisation uses a block encoded iterate in the eigenbasis of a Hamiltonian to craft Chebyshev polynomials on said Hamiltonian. The term qubitisation refers to the 2D space spanned by the states, reminiscent of eq. (\ref{eq:BE_states}).
 
 It turns out not all possible functions can be constructed exactly; using truncated Taylor expansions, decent approximations can be found. Block encoding strongly overlaps with a technique known as `linear combination of unitaries' \cite{CW12}. A simple example of such would be the block encoding of $A + B$ via the \textsc{LCU} method. Figure \ref{fig:LCU} gives the circuit diagram for such. A quick calculation shows that measuring $\ket{0}$ on the first register produces $(A+B)\ket{\psi}$. Clearly, if $B=A^2$, the function $f(x)=x(1+x)$ is trivially constructable. By having a longer combination of such unitaries, it is straightforward to see how a truncated series expansion can be implemented.
 
@@ -154,7 +156,7 @@ It turns out not all possible functions can be constructed exactly; using trunca
     \label{fig:LCU}
 \end{figure}
 
-There are some apparent bottlenecks to this method. The definition above emphasises the existence of the signal state $\ket{G}$, and more generally, the block encoding of $A$ usually comes in the form of constructing oracles that can efficiently query the elements \cite{BCK15,CKS17}. For specific examples of sparse matrices, such oracles have been explicitly calculated \cite{CLBY23}. 
+There are some apparent bottlenecks to this method. The definition above emphasises the existence of the signal state $\ket{G}$; furthermore, the block encoding of $A$ usually comes in the form of constructing oracles that can efficiently query the elements \cite{BCK15,CKS17}. For specific examples of sparse matrices, such oracles have been explicitly calculated \cite{CLBY23}. 
 
 \clearpage
 \section{Single Qubit Rotations}
@@ -166,7 +168,7 @@ Clearly, this just rotates a state around the $\ket{+}/\ket{-}$ axis of the Bloc
 \begin{equation}
     \ket{\psi} = \cos\frac{\theta}{2}\ket{0} + \ce^{\ci \phi}\sin\frac{\theta}{2}\ket{1}
 \end{equation}
-where $\theta$ describes a rotation about the $\ket{+}/\ket{-}$ axis and $\phi$ a rotation about the $\ket{0}/\ket{1}$ axis\footnote{It is common for $\theta$ and $\phi$ to be referred to as the polar and azimuthal angle respectively}. To a get a more intuitive picture of $R_{\textsc{x}}$'s effect, imagine rotating the $\ket{0}$ state by some angle $\theta$ --- it then becomes a superposition of $\ket{0}$ and $\ket{1}$. The addition of the $\phi$ allows for further rotation along the line of latitude at which the state lies. We would find that all pure states conform to following a circular path under a sequence of $R_{\textsc{x}}$ rotations; fig. \ref{fig:rx_examples} shows some examples of the effect of sequential $R_{\textsc{x}}$ applications. 
+where $\theta$ describes a rotation about the $\ket{+}/\ket{-}$ axis and $\phi$ a rotation about the $\ket{0}/\ket{1}$ axis\footnote{It is common for $\theta$ and $\phi$ to be referred to as the polar and azimuthal angle respectively}. To a get a more intuitive picture of $R_{\textsc{x}}$'s effect, imagine rotating the $\ket{0}$ state by some angle $\theta$ --- it then becomes a superposition of $\ket{0}$ and $\ket{1}$. The addition of the $\phi$ allows for further rotation along the line of latitude at which the state lies. We would find that all pure states conform to following a circular path under a sequence of $R_{\textsc{x}}$ rotations; fig. \ref{fig:rx_examples} shows an example of the effect of sequential $R_{\textsc{x}}$ applications. 
 
 \begin{figure}[h!]
     \centering

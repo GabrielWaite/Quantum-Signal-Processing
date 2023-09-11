@@ -27,7 +27,7 @@ The idea in quantum computation is to simulate the evolution of this system by i
 \begin{equation}\label{eq:exp_H}
     \ce^{\ci Ht}
 \end{equation}
-Such a simple expression has produced a vast array of research and techniques aimed at giving efficient simulation. It was proven by Lloyd \cite{Lloyd1996} that quantum computers can be used to simulate the dynamics of local Hamiltonians. Locality is already an inherit property of systems in nature \cite{Ambainis14QMA,CN14}, hence the consideration of local Hamiltonians is justified and important. The primitive method employed by Lloyd related to the Trotter--Suzuki--Lie method. This decomposes the matrix exponential into smaller steps,
+Such a simple expression is host to a vast array of research and techniques aimed at giving efficient simulation. Lloyd proved that quantum computers can be used to simulate the dynamics of local Hamiltonians \cite{Lloyd1996}. Locality is an innate property of systems in nature \cite{Ambainis14QMA,CN14} making their study of high interest. The primitive method employed by Lloyd related to the Trotter--Suzuki--Lie method. This decomposes the matrix exponential into smaller steps,
 \begin{equation}
     \ce^{\ci Ht} = \big(\ce^{\ci H_1 \frac{t}{n} + \ldots + \ci H_m \frac{t}{n}} \big)^n = \big(\ce^{\ci H_1 \frac{t}{n}}\ldots \ce^{\ci H_m \frac{t}{n}} + \mathcal{E} \big)^n
 \end{equation}

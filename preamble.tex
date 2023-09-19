@@ -16,20 +16,22 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{pgfplots}
-\usepackage{quantikz}
 \usetikzlibrary{angles,
                 graphs,
                 graphs.standard, 
-                quantikz, 
+                quantikz2, 
                 decorations.pathmorphing,
                 patterns, 
                 patterns.meta,
-                shadows}
+                shadows,
+                shapes.geometric,
+                positioning}
 \tikzset{snake it/.style={decorate, decoration=snake}}
-
+\pgfplotsset{compat=1.18} 
 % MATHEMATICAL
 \usepackage{physics}
 \usepackage{amsmath,amsfonts}
+\usepackage{amssymb}
 
 % CODE
 \usepackage{csvsimple}

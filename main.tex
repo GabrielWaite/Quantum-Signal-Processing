@@ -41,7 +41,7 @@ In this essay, we briefly analyse elements of a new approach for Hamiltonian sim
 
 There are some important prerequisites to this idea. Below, fig. \ref{fig:pipeline}, shows a workflow of concepts that lead ultimately to another technique, the quantum singular value transformation \cite{GSLW19}. We do not cover that here; however, we do note that this technique is a further generalisation of \textsc{qsp} (and other ideas). It is a powerful concept that has arguably led to the idea of a `grand unification' of quantum algorithms \cite{MRTC21}.
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \begin{tikzpicture}[
         node distance=7.5mm and 10mm,
@@ -84,7 +84,7 @@ Succinctly described, block encoding is a technique that permits the application
 
 At a basic level, this technique embeds $A$ within some larger but unitary matrix, to allow for its implementation on a quantum computer. A trivial example: the \textsc{cnot} gate, which encodes the action of the Pauli--$X$ gate on some target qubit(s), dictated by the state of the control qubit(s). Block encoding is slightly more general than this but the intuition is analogous, cf. Fig. \ref{fig:BE_diagram}.
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \begin{tikzpicture}
         \node[scale=1.25]{
@@ -128,7 +128,7 @@ Notice that the circuit of fig. \ref{fig:BE_A} can be repeated several times to 
 
 It turns out not all possible functions can be constructed exactly; using truncated Taylor expansions, decent approximations can be found. Block encoding strongly overlaps with a technique known as `linear combination of unitaries' \cite{CW12}. A simple example of such would be the block encoding of $A + B$ via the \textsc{LCU} method. Figure \ref{fig:LCU} gives the circuit diagram for such. A quick calculation shows that measuring $\ket{0}$ on the first register produces $(A+B)\ket{\psi}$. Clearly, if $B=A^2$, the function $f(x)=x(1+x)$ is trivially constructable. By having a longer combination of such unitaries, it is straightforward to see how a truncated series expansion can be implemented.
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \begin{tikzpicture}
         \node[scale=1.25]{
@@ -142,7 +142,7 @@ It turns out not all possible functions can be constructed exactly; using trunca
     \label{fig:BE_A}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \begin{tikzpicture}
         \node[scale=1.25]{
@@ -170,7 +170,7 @@ Clearly, this just rotates a state around the $\ket{+}/\ket{-}$ axis of the Bloc
 \end{equation}
 where $\theta$ describes a rotation about the $\ket{+}/\ket{-}$ axis and $\phi$ a rotation about the $\ket{0}/\ket{1}$ axis\footnote{It is common for $\theta$ and $\phi$ to be referred to as the polar and azimuthal angle respectively}. To a get a more intuitive picture of $R_{\textsc{x}}$'s effect, imagine rotating the $\ket{0}$ state by some angle $\theta$ --- it then becomes a superposition of $\ket{0}$ and $\ket{1}$. The addition of the $\phi$ allows for further rotation along the line of latitude at which the state lies. We would find that all pure states conform to following a circular path under a sequence of $R_{\textsc{x}}$ rotations; fig. \ref{fig:rx_examples} shows an example of the effect of sequential $R_{\textsc{x}}$ applications. 
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
         \begin{tikzpicture}
             \begin{axis}[
@@ -195,7 +195,7 @@ More formally, let $U_N(\theta) = R_{\textsc{x}}(\theta)\ldots R_{\textsc{x}}(\t
 \end{equation}
 The plots of fig. \ref{fig:rx_examples} correlate with the result shown in fig. \ref{fig:cos}! It is easy to conclude that $U_N(\theta)$ can only give circular paths on $\partial B^3$. An important question: \emph{how do we impart more control on the system}? This is the basis argument for the \textsc{qsp} technique. By conjugating $R_{\textsc{x}}(\theta)$ with $R_{\textsc{z}}(\phi) = \ce^{\ci \phi Z/2}$ gates we can perform more complex actions!
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \def\r{1.5}
     \tdplotsetmaincoords{60}{125}
@@ -257,7 +257,7 @@ Where $\ket{\eta_\pm} \sim \ket{0} \pm \ce^{\ci \phi}\ket{1}$. In this manner, w
 \end{equation}
 When in this form, the identification $R_\phi(\theta) = R_{\textsc{z}}(-\phi + 2\pi)R_{\textsc{x}}(\theta) R_{\textsc{z}}(\phi + 2\pi)$ can be made with a simple calculation and thus the extra control can easily be seen via the presence of $\phi$ terms! Informally, a sequence of $R_\phi(\theta)$ operations can produce specific polynomials (beyond $\cos x$), figs. \ref{fig:phi_graph1},\ref{fig:phi_graph2} provide insight into possible functions achievable and $\partial B^3$ paths. 
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \begin{tikzpicture}[scale=1.2]
         \begin{axis}[
@@ -278,7 +278,7 @@ When in this form, the identification $R_\phi(\theta) = R_{\textsc{z}}(-\phi + 2
     \label{fig:phi_graph1}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \def\r{1.5}
     \tdplotsetmaincoords{60}{125}
@@ -344,7 +344,7 @@ where $\ket{\lambda}$ are the eigenvectors of some unitary $W$; moreover,
 \end{equation}
 The circuit for $V$ transforms the eigenphases of $\ket{\lambda}$ according to the real function $h(x)$, created using a sequence of $R_\phi(\theta)$ gates. Ideally, $V$ uses minimal queries to $W$. In circuit diagram language, $V$ is a sequence of unitary rotation gates, $U_{\phi_j}$, shown in fig. \ref{fig:v_ideal}. 
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \begin{tikzpicture}
         \node[scale=1.25]{
@@ -368,7 +368,7 @@ The individual $U_{\phi}$ are related to $R_\phi(\theta)$ and a controlled--$W$ 
 \end{equation}
 With a little bit of work, it can be shown that the circuit diagram of fig. \ref{fig:u_phi} is sufficient for implementing $U_{\phi}$
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \begin{tikzpicture}
         \node[scale=1.25]{
@@ -393,22 +393,22 @@ By selecting a specific $\boldsymbol{\Phi}$, an approximation to $\ce^{\ci h(\la
 
 \clearpage
 \section{Hamiltonian Simulation Via Quantum Signal Processing}
-The Hamiltonian simulation method using \textsc{qsp} is a fairly straightforward process that involves careful considerations of the functions required. It is convenient to decompose the exponential function the following way to determine a good polynomial approximation,
+For Hamiltonian simulation it is convenient to decompose the exponential function the following way to determine a good polynomial approximation,
 \begin{equation}
     \ce^{\ci H t} = \cos Ht + \ci \sin Ht
 \end{equation}
-By using the Jacobi--Anger expansion \cite{LC17}, it can be stated that,
+By using the Jacobi--Anger expansion \cite{LC17,CMNRS18}, it can be stated that,
 \begin{equation}
     \ce^{\ci H t} = J_0(t)+ 2\sum_{k=1}^\infty (-1)^k J_{2k}(t)T_{2k}(H) + 2\ci\sum_{k=0}^\infty (-1)^k J_{2k+1}(t)T_{2k+1}(H)
 \end{equation}
-To approximate the exponential function within some error margin $\varepsilon$, the truncation value can be found to be \cite{GSLW19}\footnote{A new bound was derived in \cite{GSLW19} that improves on that of \cite{LC17}},
+To approximate the exponential function, via truncation, within some error margin $\varepsilon$ for a $d$--sparse Hamiltonian, the query complexity is bounded as \cite{LC17},
 \begin{equation}
-    d = \Theta\bigg(t + \frac{\log(1/\varepsilon)}{\log(\ce + \log(1/\varepsilon)/t)} \bigg)
+    r = \Theta\bigg(dt\norm{H}_{\text{max}} + \frac{\log(1/\varepsilon)}{\log\log(1/\varepsilon)} \bigg)
 \end{equation}
 It is, therefore sufficient to choose,
 \begin{align}
-    \tilde{A}(H) &= \frac{1}{\alpha}\left(J_0(t)+ 2\sum_{k=1}^d (-1)^k J_{2k}(t)T_{2k}(H) \right)\\
-    \tilde{C}(H) &= \frac{1}{\alpha}\left(2\sum_{k=1}^d (-1)^k J_{2k+1}(t)T_{2k+1}(H) \right)
+    \tilde{A}(H) &= \frac{1}{\alpha}\left(J_0(t)+ 2\sum_{k=1}^r (-1)^k J_{2k}(t)T_{2k}(H) \right)\\
+    \tilde{C}(H) &= \frac{1}{\alpha}\left(2\sum_{k=1}^r (-1)^k J_{2k+1}(t)T_{2k+1}(H) \right)
 \end{align}
 Where $\alpha$ is such that $\abs{A(H)}, \abs{C(H)} \leq 1$ on the interval $[-1,1]$. Hence the approximation function $\tilde{A}(H) + \ci\tilde{C}(H)$ satisfies,
 \begin{equation}
@@ -418,7 +418,13 @@ By Theorem \ref{thrm:1} the phase angles, $\boldsymbol{\Phi}_{\tilde{A}}$ and $\
 
 \clearpage
 \section{Scope}
-The quantum signal processing technique is a powerful one that will most likely be routed in many future quantum algorithms. Given that we are in the early days of this idea, there is much work to be done in using it in different contexts and understanding how useful it can be. This is not to say there is not a rich literature surrounding this topic. The workflow of ideas, fig. \ref{fig:pipeline}, gives some further general ideas the follow immediatley from \textsc{qsp}. Notably, the quantum singular value transformation \cite{GSLW19} --- a very powerful and general technique that encodes non--square matrices via a similar process. Recent work has generalised \textsc{qsp} \cite{MW23}, which focuses on using general $\text{SU}(2)$ rotations. Furthermore, an example of \textsc{qsp} has been implemented on noisy quantum hardware \cite{KKCLB23}. 
+The quantum signal processing technique is a powerful one that will most likely be rooted in future quantum algorithms. Since the idea is new, more work needs to be done to fully appreciate the different contexts where it can be useful. However, there is a rich literature surrounding this topic. The workflow of ideas, fig. \ref{fig:pipeline}, gives some further general ideas the follow immediately from \textsc{qsp}. Notably, the quantum singular value transformation \cite{GSLW19} --- a very powerful and general technique that can encode non--square matrices via a similar process. Recent work has generalised \textsc{qsp} \cite{MW23}, which focuses on using general $\text{SU}(2)$ rotations. Furthermore, an example of \textsc{qsp} has been implemented on noisy quantum hardware \cite{KKCLB23}. 
+
+With regards to Hamiltonian simulation, the \textsc{qsp} algorithm provides an optimal query complexity \cite{LC17}, beating previous work: \cite{BCK15} based on quantum walks and \cite{BCCKS15} using truncated Taylor series. A more robust query complexity was provided in \cite{GSLW19}:
+\begin{equation}
+    \Theta\bigg(\alpha \abs{t} + \frac{\log(1/\varepsilon)}{\log(\ce + \log(1/\varepsilon)/(\alpha\abs{t}))} \bigg)
+\end{equation}
+Perhaps hybrid approaches or Hamiltonian structure exploits can get us closer to sublinear scaling \cite{CHICCS20}. However, for a general Hamiltonian, sublinear scaling is impossible \cite{BACS06}.
 
 \section*{Acknowledgement}\label{sec:ack}
 Thanks to Karl Lin for fruitful discussions on qubitisation and quantum signal processing and Yuval Sanders for his insights and direction.

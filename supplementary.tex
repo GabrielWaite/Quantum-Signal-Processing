@@ -1,0 +1,93 @@
+\documentclass{article}
+\input{preamble}
+\usepackage[margin=3cm]{caption}
+\usepackage[greek,english]{babel}
+\tikzset{every picture/.style={/utils/exec={\ttfamily}}}
+\usepackage{tikz,tikz-3dplot}
+\usepackage{tikz-3dplot-circleofsphere}
+\usetikzlibrary{shadings,intersections}
+\tikzset{
+    gateO/.style={
+        draw,
+        circle, double,
+        inner sep=2pt
+    }
+}
+
+\DeclareExpandableDocumentCommand{\gateO}{O{}{m}}{|[gateO,#1]| {#2} \qw}
+
+\makeatletter
+\def\bbordermatrix#1{\begingroup \m@th
+  \@tempdima 4.75\p@
+  \setbox\z@\vbox{%
+    \def\cr{\crcr\noalign{\kern2\p@\global\let\cr\endline}}%
+    \ialign{$##$\hfil\kern2\p@\kern\@tempdima&\thinspace\hfil$##$\hfil
+      &&\quad\hfil$##$\hfil\crcr
+      \omit\strut\hfil\crcr\noalign{\kern-\baselineskip}%
+      #1\crcr\omit\strut\cr}}%
+  \setbox\tw@\vbox{\unvcopy\z@\global\setbox\@ne\lastbox}%
+  \setbox\tw@\hbox{\unhbox\@ne\unskip\global\setbox\@ne\lastbox}%
+  \setbox\tw@\hbox{$\kern\wd\@ne\kern-\@tempdima\left[\kern-\wd\@ne
+    \global\setbox\@ne\vbox{\box\@ne\kern2\p@}%
+    \vcenter{\kern-\ht\@ne\unvbox\z@\kern-\baselineskip}\,\right]$}%
+  \null\;\vbox{\kern\ht\@ne\box\tw@}\endgroup}
+\makeatother
+
+\usepackage{setspace}
+\doublespacing
+
+\title{\textsc{\textbf{Supplementary Material}}}
+\author{Gabriel Waite}
+\date{August 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Block Encoding}
+
+A formal definition for block encoding would be,
+
+\begin{defn}{\textnormal{\cite{LinLin22,LC19}}}
+
+    \noindent Given an $n$-qubit matrix $A$, if we can find parameters, $\alpha, \epsilon \in \mathbb{R}^+$ and an $(m+n)$-qubit unitary, $U_A$, and a signal state $\ket{G}\in\mathbb{C}^{2^m}$, such that, 
+    \begin{equation}
+    \norm{A - \alpha \left(\bra{G}\otimes\mathbb{I}_n\right)U_A\left(\ket{G}\otimes\mathbb{I}_n\right)} \leq \epsilon
+    \end{equation}
+    Then $U_A$ is the $(\alpha, m, \epsilon)$--\textsc{be} of $A$.
+\end{defn}
+
+Notice the existence of the signal state, $\ket{G}$ is to extract the block encoded matrix $A$ and implement its action on the target state, $\ket{\psi} = a\ket{0} + b\ket{1}$. Figure \ref{} demonstrates this effect,
+
+\begin{figure}[h!]
+    \centering
+    \begin{quantikz}
+        \lstick{$\mathtt{\ket{G}}$}& \gateO{} & \\
+        \lstick{$\mathtt{\ket{b}}$}& \gate{\mathtt{A}}\wire[u]{q} & 
+    \end{quantikz}
+    \caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+
+Trivial examples of the block encoded matrix that arise from different signal states are the \textsc{cnot} and open--\textsc{cnot}. Their structure follows as,
+\begin{equation}
+    \textsc{cnot} = \begin{bmatrix}\mathbb{I}&\varnothing \\ \varnothing & X \end{bmatrix}, \quad \text{open--\textsc{cnot}} = \begin{bmatrix}X &\varnothing \\ \varnothing & \mathbb{I} \end{bmatrix}
+\end{equation}
+With a slight abuse of notation but intuitively motivated we can write the block encoded matrix in \emph{block basis form}, i.e.
+\begin{equation}
+    \bbordermatrix{     
+            & \bra{00}& \bra{01}& \bra{10}& \bra{11}\cr
+    \ket{00}& \boldsymbol{A}       & \Gamma_1       & \Gamma_2       & \Gamma_3       \cr
+    \ket{01}& \Gamma_4       & \boldsymbol{B}       & \Gamma_5       & \Gamma_6       \cr
+    \ket{10}& \Gamma_7       & \Gamma_8       & \boldsymbol{C}       & \Gamma_9       \cr
+    \ket{11}& \Gamma_{10}       & \Gamma_{11}       & \Gamma_{12}       & \boldsymbol{D}       \cr
+}
+\end{equation}
+For a signal state $\ket{G}\in\{\ket{\text{\ttfamily bin}(i)} | i \in \{0,\ldots, 2^n -1\} \}$, the embedding position of the matrix is trivial. The off--diagonal elements of the block encoded matrix in block basis form represent the terms needed to make the whole matrix unitary. For example, if the matrix was embedded into one of the off--diagonal positions then 
+
+The form of the block encoding matrix can also be found via a circuit diagram. Noting that a {\ttfamily ctrl} gate represents $\ketbra{0}\otimes\mathbb{I} +\ketbra{1}\otimes \Lambda$, and  {\ttfamily octrl} gate represents $\ketbra{0}\otimes\Lambda +\ketbra{1}\otimes\mathbb{I}$ where $\Lambda$ is some operation. If the signal state, is say, $\ket{01}$, then the controlled parts on the signal state register present as {\ttfamily octrl}$\otimes${\ttfamily ctrl}, nested with the final effect being the action of some $A$. This can be seen via,
+\begin{equation}
+    \ketbra{0}\otimes(\ketbra{0}\otimes\mathbb{I} +\ketbra{1}\otimes(A)) +\ketbra{1}\otimes\mathbb{I}
+\end{equation}
+
+\end{document}

@@ -1,0 +1,46 @@
+\documentclass[border=10mm]{standalone}
+% \usepackage{quantikz}
+\usepackage{tikz}
+\usetikzlibrary{quantikz2}
+\usetikzlibrary{circuits.logic.US}
+\usetikzlibrary{shapes.geometric}
+
+\tikzset{
+    gateT/.style={
+        draw,
+        not gate US,
+        inner sep=5pt
+    },
+    gateO/.style={
+        draw,
+        circle, double,
+        % minimum width=0.1em,
+        % minimum height=0.1em,
+        inner sep=2pt,
+        % append after command={
+        %     % \pgfextra {
+        %     %     \fill (\tikzlastnode) circle[radius=1pt];
+        %     % }
+        % }
+    }
+}
+
+\DeclareExpandableDocumentCommand{\gateT}{O{}{m}}{|[gateT,#1]| {#2} \qw}
+\DeclareExpandableDocumentCommand{\gateO}{O{}{m}}{|[gateO,#1]| {#2} \qw}
+
+\begin{document}
+
+\begin{quantikz}
+    \lstick{$A$} & \ctrl{1} & \gate{H} & \gateO{} & \qw \rstick{$B$} \\
+    \lstick{$A$} & \gateT{H} & \gate{H} & \gate{A}\wire[u]{q} & \qw \rstick{$B$} 
+\end{quantikz}
+
+\begin{quantikz}
+& \ctrl{2} & \gate{U} & \\
+& \targ{} & \ctrl{1}\wire[u]{q} & \\
+& \targ{} & \gate{V} &
+\end{quantikz}
+
+
+
+\end{document}
